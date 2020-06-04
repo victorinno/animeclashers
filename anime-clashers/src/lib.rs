@@ -8,6 +8,12 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+mod base;
+mod player;
+mod class;
+mod clasher;
+
+
 #[wasm_bindgen]
 extern {
     fn alert(s: &str);

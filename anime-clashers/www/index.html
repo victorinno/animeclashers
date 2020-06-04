@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Anime Clashers</title>
   </head>
   <body>
-    <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+    <noscript
+      >This page contains webassembly and javascript content, please enable
+      javascript in your browser.</noscript
+    >
     <script src="./bootstrap.js"></script>
-
+    <header>Anime Clashers</header>
     <section id="form_new_player">
-      
-
+      <h1>New player</h1>
+      <label for="name_new_form" style="width: 100%;">Name:</label>
+      <input
+        type="text"
+        name="name_new_form"
+        id="name_new_form"
+        style="width: 100%;"
+      />
+      <button id="new_player_btn">Create</button>
     </section>
-
-
+    <section id="player_area">
+      <h1 id="player_name" style="width: 100%;"></h1>
+      <div style="width: 100%;">
+      <button>New Clasher</button>
+      </div>
+      <ul id="list_of_clashers" style="width: 100%;"></ul>
+    </section>
   </body>
 </html>
