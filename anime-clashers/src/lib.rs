@@ -12,6 +12,7 @@ mod base;
 mod player;
 mod class;
 mod clasher;
+mod powers;
 
 
 #[wasm_bindgen]
@@ -22,4 +23,9 @@ extern {
 #[wasm_bindgen]
 pub fn greet() {
     alert("Hello, anime-clashers!");
+}
+
+#[wasm_bindgen]
+pub fn init()  {
+    utils::set_panic_hook();
 }

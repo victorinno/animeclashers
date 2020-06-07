@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq)]
 pub struct Class {
     name: String,
     pub power: usize,
@@ -11,6 +12,24 @@ pub struct Class {
     pub resistence: usize,
     pub health_points: usize,
     pub energy_points: usize,
+}
+
+impl Ord for Class {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.name.cmp(&other.name)
+    }
+}
+
+impl PartialOrd for Class {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl PartialEq for Class {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
 }
 
 #[wasm_bindgen]
@@ -32,6 +51,24 @@ impl Class {
             resistence,
             health_points,
             energy_points,
+        }
+    }
+
+    pub fn get_by_name(name: String) -> Class {
+        let mut list: Vec<Class> =
+            serde_json::from_str(&Class::list_all_classes()).expect("List of classes are static");
+        list.sort();
+        match list.binary_search_by(|c| c.name.cmp(&name)) {
+            Ok(c) => list.get(c).expect("Already found in binary search").clone(),
+            Err(c) => Class {
+                name: "null".to_string(),
+                power: 0,
+                dexterity: 0,
+                agility: 0,
+                resistence: 0,
+                health_points: 0,
+                energy_points: 0,
+            },
         }
     }
 
