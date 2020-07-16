@@ -13,6 +13,7 @@ mod player;
 mod class;
 mod clasher;
 mod powers;
+mod combat;
 
 
 #[wasm_bindgen]

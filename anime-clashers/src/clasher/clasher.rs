@@ -1,4 +1,4 @@
-use crate::class::class::Class;
+use crate::{class::class::Class};
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use uuid::Uuid;
@@ -115,6 +115,10 @@ impl Clasher {
     pub fn load_db() -> String {
         serde_json::to_string(&Clasher::load().expect("There must be a clasher db"))
             .expect("DB must be parsed.")
+    }
+
+    pub fn generate_random_enemy() -> Clasher {
+        unimplemented!();
     }
 
     #[wasm_bindgen(getter)]
