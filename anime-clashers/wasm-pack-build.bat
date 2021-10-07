@@ -1,1 +1,0 @@
-call wasm-pack build
