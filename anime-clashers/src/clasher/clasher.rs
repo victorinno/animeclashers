@@ -74,7 +74,7 @@ impl Clasher {
             panic!("Name must be filled.");
         }
 
-        let n = Clasher {
+        let new_clasher = Clasher {
             id: Uuid::new_v4().to_hyphenated().to_string(),
             name: name.to_string(),
             power: clas.power,
@@ -87,35 +87,10 @@ impl Clasher {
             energy_points: clas.energy_points * 10,
             clazz: clas,
         };
-
-        let mut db: Option<Vec<Clasher>> = Clasher::load();
-        if db.is_none() {
-            Clasher::save_db(Vec::from([n.clone()]));
-        } else {
-            let mut db = db.unwrap();
-            db.sort();
-            let index = match db.binary_search(&n) {
-                Ok(c) => c,
-                Err(c) => c,
-            };
-            db.insert(index, n.clone());
-            db.sort();
-            Clasher::save_db(db);
-        }
-        n
+        new_clasher
     }
 
-    pub fn get_by_name(name: String) -> Clasher {
-        let mut db: Vec<Clasher> = Clasher::load().expect("Already has a db for clashers");
-        db.sort();
-        let index = db.binary_search_by(|c| c.name.cmp(&name)).expect("This is a actual clasher");
-        db.get(index).expect("This is a actual clasher").clone()
-    }
-
-    pub fn load_db() -> String {
-        serde_json::to_string(&Clasher::load().expect("There must be a clasher db"))
-            .expect("DB must be parsed.")
-    }
+    pub fn convert(clasher: &Clasher) -> String{serde_json::to_string(clasher).expect("Clasher should be parsable to json")}
 
     pub fn generate_random_enemy() -> Clasher {
         unimplemented!();
@@ -144,41 +119,5 @@ impl Clasher {
     #[wasm_bindgen(setter)]
     pub fn set_clazz(&mut self, clazz: Class) {
         self.clazz = clazz;
-    }
-}
-
-impl Clasher {
-    fn load() -> Option<Vec<Clasher>> {
-        let window: Window = web_sys::window().expect("no global `window` exists");
-        let storage: Storage = window
-            .local_storage()
-            .expect("no global `local sotrage` exists")
-            .expect("no global `local sotrage` exists");
-        let json: Option<String> = match storage.get_item("clashers") {
-            Ok(j) => j,
-            _ => Some("[]".to_string()),
-        };
-
-        match json {
-            Some(j) => Option::from(Clasher::parse_db(j)),
-            _ => Some(Vec::new()),
-        }
-    }
-
-    pub fn parse_db(json: String) -> Vec<Clasher> {
-        let p: Vec<Clasher> = serde_json::from_str(&json)
-            .expect(format!("String is not a valied Clasher json. {}", json.as_str()).as_str());
-        return p;
-    }
-
-    #[warn(unused_must_use)]
-    fn save_db(d: Vec<Clasher>) {
-        let window: Window = web_sys::window().expect("no global `window` exists");
-        let storage: Storage = window
-            .local_storage()
-            .expect("no global `local sotrage` exists")
-            .expect("no global `local sotrage` exists");
-        let json = serde_json::to_string(&d).expect("clasher db must exists");
-        storage.set_item("clashers", json.as_str()).expect("the clashers failed to persist.");
     }
 }

@@ -8,13 +8,15 @@ use wasm_bindgen::prelude::*;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+#[macro_use]
 mod base;
-mod player;
+pub mod player;
 mod class;
 mod clasher;
 mod powers;
 mod combat;
 
+pub use player::player::*;
 
 #[wasm_bindgen]
 extern {
